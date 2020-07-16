@@ -1,0 +1,32 @@
+.container {
+    height: 80vh;
+    margin-top: 50px;
+}
+
+.close {
+    font-size: 28px;
+    float: left;
+    margin: auto 0 auto 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.deleteButton {
+    padding: 0;
+    font-size: 28px;
+    border: none;
+    background: none;
+}
+
+.form-row {
+    margin: 13px 0;
+}
+
+.addFieldButton {
+    padding-left: 5px;
+}
+
+.generateDataButton {
+    padding-left: 5px;
+}

@@ -1,0 +1,14 @@
+
+h3 {
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+a div {
+    display: inline-block;
+    margin-right: 17px;
+}
+
+a div i {
+    font-size: 30px !important;
+}
