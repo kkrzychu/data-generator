@@ -5,4 +5,5 @@ footer {
 span {
     margin-right: 1.5rem;
     text-transform: uppercase;
+    letter-spacing: 2px;
 }

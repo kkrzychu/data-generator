@@ -11,7 +11,25 @@
                 <h4>Usuń</h4>
             </div>
         </div>
-        <div class="form-row">
+        <div class="form-row" *ngFor="let item of filedList">
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Nazwa">
+            </div>
+            <div class="col">
+                <select id="inputState" class="form-control">
+                    <option selected>Imię</option>
+                    <option>Nazwisko</option>
+                    <option>numer</option>
+                </select>
+            </div>
+            <div class="col">
+                <div class="close">
+                    <a type="button" (click)="deleteField(item)"  class="deleteButton"><i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="form-row">
             <div class="col">
                 <input type="text" class="form-control" placeholder="Nazwa">
             </div>
@@ -59,36 +77,17 @@
                     <option>Nazwisko</option>
                     <option>numer</option>
                 </select>
-            </div>
-            <div class="col">
+            </div> -->
+            <!-- <div class="col">
                 <div class="close">
                     <a type="button" class="deleteButton"><i class="fa fa-times"></i></a>
 
                 </div>
             </div>
-        </div>
-
-        <div class="form-row">
-            <div class="col">
-                <input type="text" class="form-control" placeholder="Nazwa">
-            </div>
-            <div class="col">
-                <select id="inputState" class="form-control">
-                    <option selected>Imię</option>
-                    <option>Nazwisko</option>
-                    <option>numer</option>
-                </select>
-            </div>
-            <div class="col">
-                <div class="close">
-                    <a type="button" class="deleteButton"><i class="fa fa-times"></i></a>
-
-                </div>
-            </div>
-        </div>
+        </div> -->
         <div class="form-row">
             <div class="addFieldButton">
-                <button type="button" class="btn btn-secondary">Dodaj pole</button>
+                <button type="button" (click)="addField()" class="btn btn-secondary">Dodaj pole</button>
             </div>
         </div>
     </form>
