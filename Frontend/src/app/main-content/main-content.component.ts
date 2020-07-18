@@ -8,6 +8,17 @@ import { Component, OnInit } from '@angular/core';
 export class MainContentComponent implements OnInit {
 
   filedList: number[] = [0,1,2,3];
+  options: string[] = [
+    "Imię", 
+    "Nazwisko", 
+    "Id", 
+    "Email", 
+    "Nr telefonu", 
+    "Adres", 
+    "Miasto", 
+    "Kraj",
+    "Wiek"
+  ];
 
   constructor() {
     
@@ -18,11 +29,9 @@ export class MainContentComponent implements OnInit {
 
   addField() {
     this.filedList.push(this.filedList.length);
-    console.log(this.filedList);
   }
 
   deleteField(item) {
     this.filedList =this.filedList.filter( e => e!== item);
-    console.log(this.filedList);
   }
 }

@@ -17,9 +17,7 @@
             </div>
             <div class="col">
                 <select id="inputState" class="form-control">
-                    <option selected>Imię</option>
-                    <option>Nazwisko</option>
-                    <option>numer</option>
+                    <option *ngFor="let opt of options">{{ opt }}</option>
                 </select>
             </div>
             <div class="col">
