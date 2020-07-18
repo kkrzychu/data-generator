@@ -1,18 +1,18 @@
 
-var mongoose = require('mongoose');
-var FirstName = require('./models/firstName');
-var LastName = require('./models/lastName');
-var Email = require('./models/email');
-var Country = require('./models/country');
-var City = require('./models/city');
-var Address = require('./models/address');
+const mongoose = require('mongoose');
+const FirstName = require('./models/firstName');
+const LastName = require('./models/lastName');
+const Email = require('./models/email');
+const Country = require('./models/country');
+const City = require('./models/city');
+const Address = require('./models/address');
 
-var FirstNameData = require('./data/firstNameData');
-var LastNameData = require('./data/lastNameData');
-var EmailData = require('./data/emailData');
-var CountryData = require('./data/countryData');
-var CityData = require('./data/cityData');
-var AddressData = require('./data/addressData');
+const FirstNameData = require('./data/firstNameData');
+const LastNameData = require('./data/lastNameData');
+const EmailData = require('./data/emailData');
+const CountryData = require('./data/countryData');
+const CityData = require('./data/cityData');
+const AddressData = require('./data/addressData');
 
 
 
