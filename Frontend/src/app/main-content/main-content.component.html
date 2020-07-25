@@ -11,9 +11,58 @@
                 <h4>Usuń</h4>
             </div>
         </div>
-        <div class="form-row" *ngFor="let item of filedList">
+        <div class="form-row" >
             <div class="col">
-                <input type="text" class="form-control" placeholder="Nazwa">
+                <input #nameInputOne type="text" class="form-control" placeholder="Nazwa">
+            </div>
+            <div class="col">
+                <select #optOne id="inputState" class="form-control">
+                    <option *ngFor="let opt of options">{{ opt }}</option>
+                </select>
+            </div>
+            <div class="col">
+                <div class="close">
+                    <a type="button"   class="deleteButton"><i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row" >
+            <div class="col">
+                <input #nameInputTwo type="text" class="form-control" placeholder="Nazwa">
+            </div>
+            <div class="col">
+                <select #optTwo id="inputState" class="form-control">
+                    <option *ngFor="let opt of options">{{ opt }}</option>
+                </select>
+            </div>
+            <div class="col">
+                <div class="close">
+                    <a type="button"   class="deleteButton"><i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row" >
+            <div class="col">
+                <input #nameInputThree type="text" class="form-control" placeholder="Nazwa">
+            </div>
+            <div class="col">
+                <select #optThree id="inputState" class="form-control">
+                    <option *ngFor="let opt of options">{{ opt }}</option>
+                </select>
+            </div>
+            <div class="col">
+                <div class="close">
+                    <a type="button"   class="deleteButton"><i class="fa fa-times"></i></a>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- <div class="form-row" *ngFor="let item of filedList; let i = index">
+            <div class="col">
+                <input #inputList[i]  type="text"  class="form-control" placeholder="Nazwa">
             </div>
             <div class="col">
                 <select id="inputState" class="form-control">
@@ -25,88 +74,33 @@
                     <a type="button" (click)="deleteField(item)"  class="deleteButton"><i class="fa fa-times"></i></a>
                 </div>
             </div>
-        </div>
-
-        <!-- <div class="form-row">
-            <div class="col">
-                <input type="text" class="form-control" placeholder="Nazwa">
-            </div>
-            <div class="col">
-                <select id="inputState" class="form-control">
-                    <option selected>Imię</option>
-                    <option>Nazwisko</option>
-                    <option>numer</option>
-                </select>
-            </div>
-            <div class="col">
-                <div class="close">
-                    <a type="button" class="deleteButton"><i class="fa fa-times"></i></a>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="col">
-                <input type="text" class="form-control" placeholder="Nazwa">
-            </div>
-            <div class="col">
-                <select id="inputState" class="form-control">
-                    <option selected>Imię</option>
-                    <option>Nazwisko</option>
-                    <option>numer</option>
-                </select>
-            </div>
-            <div class="col">
-                <div class="close">
-                    <a type="button" class="deleteButton"><i class="fa fa-times"></i></a>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="col">
-                <input type="text" class="form-control" placeholder="Nazwa">
-            </div>
-            <div class="col">
-                <select id="inputState" class="form-control">
-                    <option selected>Imię</option>
-                    <option>Nazwisko</option>
-                    <option>numer</option>
-                </select>
-            </div> -->
-            <!-- <div class="col">
-                <div class="close">
-                    <a type="button" class="deleteButton"><i class="fa fa-times"></i></a>
-
-                </div>
-            </div>
         </div> -->
+
+        
         <div class="form-row">
             <div class="addFieldButton">
                 <button type="button" (click)="addField()" class="btn btn-secondary">Dodaj pole</button>
             </div>
         </div>
-    </form>
+    
 
     <hr>
 
-    <form>
+    
         <div class="form-row">
             <label for="records" class="col-sm-2 col-form-label">Ilość rekordów:</label>
             <div class="col-sm-3">
-                <input type="number" class="form-control" value="10" id="records" min="1" max="15000000">
+                <input #numberInput type="number" class="form-control" value="10" id="records" min="1" max="15000000">
             </div>
         </div>
-    </form>
+    
 
     <hr>
 
-    <form>
+    
         <div class="form-row">
             <div class="generateDataButton">
-                <button type="button" class="btn btn-success">Wygeneruj plik</button>
+                <button type="button" (click)="generateFile(nameInputOne.value,nameInputTwo.value,nameInputThree.value, optOne.value, optTwo.value, optThree.value, numberInput.value)" class="btn btn-success">Wygeneruj plik</button>
             </div>
         </div>
     </form>
