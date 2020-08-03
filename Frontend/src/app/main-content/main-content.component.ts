@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FileService } from '../file.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-main-content',
@@ -28,7 +29,7 @@ export class MainContentComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    this.fileService.getView().subscribe();
   }
 
   addField() {
@@ -53,6 +54,7 @@ export class MainContentComponent implements OnInit {
     this.fileService.generateFile(obj).subscribe((res: any) => {
       console.log("Tis is jason file" );
       console.log(res);
+      saveAs(new Blob([JSON.stringify(res)], {type: "text/plain;charset=utf-8"}), "random.json")
     });
   }
 

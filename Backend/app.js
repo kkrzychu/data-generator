@@ -4,6 +4,7 @@ const { mongoose } = require('./mongoose');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const dataDB = require('./seed');
+const fs = require('fs');
 
 
 const FirstName = require('./models/firstName');
@@ -12,7 +13,6 @@ const Email = require('./models/email');
 const Country = require('./models/country');
 const City = require('./models/city');
 const Address = require('./models/address');
-const firstName = require('./models/firstName');
 
 app.use(bodyParser.json());
 
@@ -36,29 +36,20 @@ app.use(function (req, res, next) {
 
 
 app.get('/generator', (req, res) => {
-    // FirstName.find().then((name) => {
-    //     res.send(name);
-    // });
+    
+    //res.download('D:/Projekty/Data_Generator/Backend/data/random.json', 'random.json');
 });
 
-app.post('/generator', async (req, res) => {
+app.post('/generator',  (req, res) => {
     let objectPOST = req.body.obj;
-    let objectRandom = randomData();
+    
     
     
     randomData(objectPOST).then((ob) => { 
-        var filename = 'result.json'; 
-        var mimetype = 'application/json';
-
-        res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-        res.setHeader('Content-type', mimetype);
-        res.write(JSON.stringify(ob));
-        //res.attachment(JSON.stringify(ob));
-        res.end();
+        
+        res.download('./data/random.json', 'random.json');
     });
     
-    
-    //res.send("all works");
 })
 
 app.listen(3000, () => {
@@ -142,10 +133,33 @@ async function randomData(ob) {
     var b = ob.nameTwo;
     var c = ob.nameThree;
     var arrayOfObjects = new Array();
+    var option;
+    var optionTwo;
+    var optionThree;
+
+    
 
     for(var i=0;i<ob.number;i++) {
+        if(ob.optOne == "Imię") {
+            option = getRandomName();
+        }
+        if(ob.optOne == "Nazwisko") {
+            option = getRandomLastName();
+        }
+        if(ob.optOne == "Email") {
+            option = getRandomEmail();
+        }
+        if(ob.optOne == "Adres") {
+            option = getRandomAddress();
+        }
+        if(ob.optOne == "Miasto") {
+            option = getRandomCity();
+        }
+        if(ob.optOne == "Państwo") {
+            option = getRandomCountry();
+        }
         var object =  {};
-        object[a] = getRandomName();
+        object[a] = option;
         object[b] = getRandomLastName();
         object[c] = getRandomAddress();
         arrayOfObjects.push(object);
@@ -153,5 +167,16 @@ async function randomData(ob) {
 
     var arrayJSON = JSON.stringify(arrayOfObjects);
     console.log(arrayJSON);
+    var path = './data/random.json';
+    storeData(arrayJSON, path);
     return arrayJSON;
 }
+
+const storeData = (arrayJSON, path) => {
+    try {
+        fs.writeFileSync(path, arrayJSON)
+    } catch (err) {
+        console.error(err)
+    }
+}
+
