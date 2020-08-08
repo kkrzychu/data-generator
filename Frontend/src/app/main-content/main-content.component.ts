@@ -10,7 +10,26 @@ import { saveAs } from 'file-saver';
 })
 export class MainContentComponent implements OnInit {
 
-  filedList: number[] = [0,1,2,3];
+  valid: boolean = false; 
+  show: boolean = false;
+  arrayOfFields: any[] = [
+    {
+      inputField: '',
+      selectOption: ''
+    },
+    {
+      inputField: '',
+      selectOption: ''
+    },
+    {
+      inputField: '',
+      selectOption: ''
+    },
+    {
+      inputField: '',
+      selectOption: ''
+    }
+  ]
   options: string[] = [
     "Imię", 
     "Nazwisko", 
@@ -29,34 +48,49 @@ export class MainContentComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.fileService.getView().subscribe();
+    
   }
 
+
   addField() {
-    this.filedList.push(this.filedList.length);
+    this.arrayOfFields.push({
+      inputField: '',
+      selectOption: ''
+    });
+    
   }
 
   deleteField(item) {
-    this.filedList =this.filedList.filter( e => e!== item);
+    this.arrayOfFields = this.arrayOfFields.filter( e => e!== item);
   }
 
-  generateFile(nameOne: string, nameTwo: string, nameThree: string, optOne: string, optTwo: string, optThree: string, number: number) {
-    let obj = {
-      nameOne: nameOne,
-      nameTwo: nameTwo,
-      nameThree: nameThree,
-      optOne: optOne,
-      optTwo: optTwo,
-      optThree: optThree,
-      number: number
-    };
-    console.log(obj);
-    this.fileService.generateFile(obj).subscribe((res: any) => {
-      console.log("Tis is jason file" );
-      console.log(res);
-      saveAs(new Blob([JSON.stringify(res)], {type: "text/plain;charset=utf-8"}), "random.json")
-    });
+  generateFile(num) {
+    this.validForm();
+    if(this.valid) {
+      this.show = false;
+      let obj = {
+        tabOfInputs: this.arrayOfFields,
+        numberOfInputs: num
+      };
+      this.fileService.generateFile(obj).subscribe((res: any) => {
+        saveAs(new Blob([JSON.stringify(res)], {type: "text/plain;charset=utf-8"}), "random.json")
+      });
+    } else {
+      this.show = true;
+    }
+  }
+
+  validForm() {
+    this.arrayOfFields.forEach((item) => {
+      if(item.inputField == "" || item.selectOption == "") {
+        this.valid = false;
+      } else {
+        this.valid = true;
+      }
+    })
   }
 
   
 }
+
+
