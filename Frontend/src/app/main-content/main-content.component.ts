@@ -12,22 +12,32 @@ export class MainContentComponent implements OnInit {
 
   valid: boolean = false; 
   show: boolean = false;
+  
+  subObject: object[] = [];
   arrayOfFields: any[] = [
     {
       inputField: '',
-      selectOption: ''
+      selectOption: '',
+      firstSubObject: [],
+      addedSubObject: false
     },
     {
       inputField: '',
-      selectOption: ''
+      selectOption: '',
+      firstSubObject: [],
+      addedSubObject: false
     },
     {
       inputField: '',
-      selectOption: ''
+      selectOption: '',
+      firstSubObject: [],
+      addedSubObject: false
     },
     {
       inputField: '',
-      selectOption: ''
+      selectOption: '',
+      firstSubObject: [],
+      addedSubObject: false
     }
   ]
   options: string[] = [
@@ -55,13 +65,24 @@ export class MainContentComponent implements OnInit {
   addField() {
     this.arrayOfFields.push({
       inputField: '',
-      selectOption: ''
+      selectOption: '',
+      firstSubObject: [],
+      addedSubObject: false
     });
     
   }
 
   deleteField(item) {
     this.arrayOfFields = this.arrayOfFields.filter( e => e!== item);
+    console.log(item);
+  }
+
+  deleteSubField(item, num) {
+    this.arrayOfFields[num].firstSubObject = this.arrayOfFields[num].firstSubObject.filter( e => e!==item);
+    if(this.arrayOfFields[num].firstSubObject.length == 0) {
+      this.arrayOfFields[num].addedSubObject = false;
+    }
+    console.log(num);
   }
 
   generateFile(num) {
@@ -90,7 +111,19 @@ export class MainContentComponent implements OnInit {
     })
   }
 
+  addSubObject(item) {
+    item.firstSubObject.push({
+      subInputField: '',
+      subSelectOption: ''
+    });
+    item.addedSubObject = true;
+    
+  }
+
   
+  showTest() {
+    console.log(this.arrayOfFields);
+  }
 }
 
 

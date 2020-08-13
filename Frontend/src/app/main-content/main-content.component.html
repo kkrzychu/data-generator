@@ -1,5 +1,5 @@
-<div class="container">
-    <form>
+<div class="container ">
+    <form class="allForm">
         <div class="form-row" >
             <div *ngIf="show" class="alert alert-danger" style="width: 100%;" role="alert">
                 Wypełnij wszystkie pola
@@ -7,20 +7,73 @@
         </div>
 
         <div class="form-row">
-            <div class="col">
+            <div class="col fieldDescription">
                 <h4>Nazwa pola</h4>
             </div>
-            <div class="col">
+            <div class="col ">
                 <h4>Typ</h4>
             </div>
-            <div class="col">
+            <div class="col ">
                 <h4>Usuń</h4>
             </div>
         </div>
 
+        <div *ngFor="let item of arrayOfFields; let i = index">
+            <div class="form-row">
+                <div class="col-0.5">
+                    <div class="close">
+                        <a type="button" (click)="addSubObject(item)" class="deleteButton"><i class="fa fa-plus-circle"></i></a>
+                    </div>
+                </div>
+                <div class="col">
+                    <input required type="text" [(ngModel)]="item.inputField" name="inp_{{i}}" class="form-control "
+                        placeholder="Nazwa" >
+                </div>
+                <div class="col" >
+                    <select *ngIf="!item.addedSubObject" [(ngModel)]="item.selectOption" name="sel_{{i}}" class="form-control">
+                        <option *ngFor="let opt of options">{{opt}}</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <div class="close">
+                        <a type="button" (click)="deleteField(item)" class="deleteButton"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- SUB-OBJECT --> 
+            <div class="form-row" *ngFor="let sub of item.firstSubObject; let j = index" style="padding-left: 70px;">
+                <div class="col-0.5">
+                    <!-- <div class="close">
+                        <a type="button"  class="deleteButton"><i class="fa fa-plus-circle"></i></a>
+                    </div> -->
+                </div>
+                <div class="col">
+                    <input required type="text" [(ngModel)]="sub.subInputField" name="inpu_{{i}}" class="form-control"
+                        placeholder="Nazwa" >
+                </div>
+                <div class="col">
+                    <select [(ngModel)]="sub.subSelectOption" name="sele_{{i}}" class="form-control">
+                        <option *ngFor="let opti of options">{{opti}}</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <div class="close">
+                        <a type="button" (click)="deleteSubField(sub,i)" class="deleteButton"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+            </div>
 
+            
+            
+        </div>
 
-        <div class="form-row" *ngFor="let item of arrayOfFields; let i = index">
+        <!-- WERSJA PODSTAWOWA -->
+        <!-- <div class="form-row" *ngFor="let item of arrayOfFields; let i = index">
+            <div class="col-0.5">
+                <div class="close">
+                    <a type="button" class="deleteButton"><i class="fa fa-plus-circle"></i></a>
+                </div>
+            </div>
             <div class="col">
                 <input required type="text" [(ngModel)]="item.inputField" name="inp_{{i}}" class="form-control"
                     placeholder="Nazwa">
@@ -35,7 +88,7 @@
                     <a type="button" (click)="deleteField(item)" class="deleteButton"><i class="fa fa-times"></i></a>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
         <div class="form-row">
@@ -60,8 +113,10 @@
 
         <div class="form-row">
             <div class="generateDataButton">
-                <button type="button" (click)="generateFile(numberInput.value)" routerLink="/generator"
+                <button type="button" (click)="showTest()" routerLink="/generator"
                     class="btn btn-success">Wygeneruj plik</button>
+                    <!-- <button type="button" (click)="generateFile(numberInput.value)" routerLink="/generator"
+                    class="btn btn-success">Wygeneruj plik</button> -->
             </div>
         </div>
     </form>

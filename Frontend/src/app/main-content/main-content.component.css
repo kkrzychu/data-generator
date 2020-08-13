@@ -1,6 +1,11 @@
 .container {
-    height: 80vh;
+    height: auto;
+    min-height: 78vh;
     margin-top: 50px;
+}
+
+.allForm {
+    /* margin-bottom: 180px; */
 }
 
 .close {
@@ -29,5 +34,9 @@
 
 .generateDataButton {
     padding-left: 5px;
+}
+
+.fieldDescription {
+padding-left: 48px;
 }
 
