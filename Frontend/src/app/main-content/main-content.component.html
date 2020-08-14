@@ -67,30 +67,7 @@
             
         </div>
 
-        <!-- WERSJA PODSTAWOWA -->
-        <!-- <div class="form-row" *ngFor="let item of arrayOfFields; let i = index">
-            <div class="col-0.5">
-                <div class="close">
-                    <a type="button" class="deleteButton"><i class="fa fa-plus-circle"></i></a>
-                </div>
-            </div>
-            <div class="col">
-                <input required type="text" [(ngModel)]="item.inputField" name="inp_{{i}}" class="form-control"
-                    placeholder="Nazwa">
-            </div>
-            <div class="col">
-                <select [(ngModel)]="item.selectOption" name="sel_{{i}}" class="form-control">
-                    <option *ngFor="let opt of options">{{opt}}</option>
-                </select>
-            </div>
-            <div class="col">
-                <div class="close">
-                    <a type="button" (click)="deleteField(item)" class="deleteButton"><i class="fa fa-times"></i></a>
-                </div>
-            </div>
-        </div> -->
-
-
+        
         <div class="form-row">
             <div class="addFieldButton">
                 <button type="button" (click)="addField()" class="btn btn-secondary">Dodaj pole</button>

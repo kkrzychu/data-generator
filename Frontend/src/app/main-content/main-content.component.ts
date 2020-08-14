@@ -105,11 +105,22 @@ export class MainContentComponent implements OnInit {
   validForm() {
     this.arrayOfFields.forEach((item) => {
     
-        if(item.inputField == "" ) {
+      if(item.addedSubObject == false) {
+        if(item.inputField == "" || item.selectOption == "") {
           this.valid = false;
-        }else {
+        } else {
           this.valid = true;
         }
+      } else {
+        item.firstSubObject.forEach((it) => {
+          if(item.inputField == "" || it.subInputField == "" || it.subSelectOption == "") {
+            this.valid = false;
+          } else {
+            this.valid = true;
+          }
+        })
+      }
+        
       })
   }
 
@@ -124,6 +135,7 @@ export class MainContentComponent implements OnInit {
 
   
   showTest() {
+    this.validForm();
     console.log(this.arrayOfFields);
   }
 }
