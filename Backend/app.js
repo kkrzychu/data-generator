@@ -142,43 +142,90 @@ async function randomData(ob) {
 
     var arrayOfObjects = new Array();
     var tab = ob.tabOfInputs;
+    //console.log(tab);
     var num = ob.numberOfInputs;
 
 
     for (var i = 0; i < num; i++) {
         var objectTab = {};
+        var subObject = {};
         tab.forEach((item) => {
+            
             var a = item.inputField;
-            if (item.selectOption == "Imię") {
-                objectTab[a] = getRandomName();
+            var subObject = {};
+            if(item.addedSubObject == true) {
+                item.firstSubObject.forEach((it) => {
+                    var b = it.subInputField;
+                    if (it.subSelectOption == "Imię") {
+                        subObject[b] = getRandomName();
+                    }
+                    if (it.subSelectOption == "Nazwisko") {
+                        subObject[b] = getRandomLastName();
+                    }
+                    if (it.subSelectOption == "Email") {
+                        subObject[b] = getRandomEmail();
+                    }
+                    if (it.subSelectOption == "Adres") {
+                        subObject[b] = getRandomAddress();
+                    }
+                    if (it.subSelectOption == "Miasto") {
+                        subObject[b] = getRandomCity();
+                    }
+                    if (it.subSelectOption == "Państwo") {
+                        subObject[b] = getRandomCountry();
+                    }
+                    if (it.subSelectOption == "Id") {
+                        subObject[b] = i + 1;
+                    }
+                    if (it.subSelectOption == "Nr telefonu") {
+                        subObject[b] = getRandomPhone();
+                    }
+                    if (it.subSelectOption == "Wiek") {
+                        subObject[b] = getRandomAge();
+                    }
+                    
+                });
+                objectTab[a] = subObject; 
+                
             }
-            if (item.selectOption == "Nazwisko") {
-                objectTab[a] = getRandomLastName();
+            
+            
+            if(item.addedSubObject == false) {
+                if (item.selectOption == "Imię") {
+                    objectTab[a] = getRandomName();
+                }
+                if (item.selectOption == "Nazwisko") {
+                    objectTab[a] = getRandomLastName();
+                }
+                if (item.selectOption == "Email") {
+                    objectTab[a] = getRandomEmail();
+                }
+                if (item.selectOption == "Adres") {
+                    objectTab[a] = getRandomAddress();
+                }
+                if (item.selectOption == "Miasto") {
+                    objectTab[a] = getRandomCity();
+                }
+                if (item.selectOption == "Państwo") {
+                    objectTab[a] = getRandomCountry();
+                }
+                if (item.selectOption == "Id") {
+                    objectTab[a] = i + 1;
+                }
+                if (item.selectOption == "Nr telefonu") {
+                    objectTab[a] = getRandomPhone();
+                }
+                if (item.selectOption == "Wiek") {
+                    objectTab[a] = getRandomAge();
+                }
+                
             }
-            if (item.selectOption == "Email") {
-                objectTab[a] = getRandomEmail();
-            }
-            if (item.selectOption == "Adres") {
-                objectTab[a] = getRandomAddress();
-            }
-            if (item.selectOption == "Miasto") {
-                objectTab[a] = getRandomCity();
-            }
-            if (item.selectOption == "Państwo") {
-                objectTab[a] = getRandomCountry();
-            }
-            if (item.selectOption == "Id") {
-                objectTab[a] = i + 1;
-            }
-            if (item.selectOption == "Nr telefonu") {
-                objectTab[a] = getRandomPhone();
-            }
-            if (item.selectOption == "Wiek") {
-                objectTab[a] = getRandomAge();
-            }
-
+            
+            
         });
-
+        // console.log("PO if")
+        //console.log(objectTab)
+        
         arrayOfObjects.push(objectTab);
     }
 

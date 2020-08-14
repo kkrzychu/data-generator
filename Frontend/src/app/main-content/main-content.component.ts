@@ -87,6 +87,7 @@ export class MainContentComponent implements OnInit {
 
   generateFile(num) {
     this.validForm();
+    console.log(this.arrayOfFields);
     if(this.valid) {
       this.show = false;
       let obj = {
@@ -103,12 +104,13 @@ export class MainContentComponent implements OnInit {
 
   validForm() {
     this.arrayOfFields.forEach((item) => {
-      if(item.inputField == "" || item.selectOption == "") {
-        this.valid = false;
-      } else {
-        this.valid = true;
-      }
-    })
+    
+        if(item.inputField == "" ) {
+          this.valid = false;
+        }else {
+          this.valid = true;
+        }
+      })
   }
 
   addSubObject(item) {
@@ -117,7 +119,7 @@ export class MainContentComponent implements OnInit {
       subSelectOption: ''
     });
     item.addedSubObject = true;
-    
+    item.inputField = '';
   }
 
   
