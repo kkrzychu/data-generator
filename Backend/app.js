@@ -40,8 +40,9 @@ app.post('/generator', (req, res) => {
     //console.log(objectPOST);
 
     randomData(objectPOST).then((ob) => {
-
-        res.download('./data/random.json', 'random.json');
+        //console.log(ob);
+        //res.download('./data/random.json', 'random.json');
+        res.send(ob);
     });
 
 })
@@ -52,6 +53,38 @@ app.listen(3000, () => {
 
 
 async function randomData(ob) {
+
+
+    var arrayOfObjects = new Array();
+    var tab = JSON.parse(ob.tabOfInputs);
+    var obj = Object.entries(tab[0]);
+    var keys = new Array();
+    var values = new Array();
+    var newValues = new Array();
+    var num = ob.numberOfInputs;
+
+    for (var z = 0; z < obj.length; z++) 
+    {
+        var t = obj[z];
+        keys.push(t[0]);
+        values.push(t[1]);
+    }
+    
+    var x = await checkTab(num, keys, values, newValues, arrayOfObjects);
+    
+    return x;
+    
+}
+
+const storeData = (arrayJSON, path) => {
+    try {
+        fs.writeFileSync(path, arrayJSON)
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+async function checkTab  (num, keys, values, newValues, arrayOfObjects)  {
 
     // ARRAY OF NAMES
     var tabName = await FirstName.find();
@@ -140,106 +173,47 @@ async function randomData(ob) {
     }
 
 
-    var arrayOfObjects = new Array();
-    var tab = ob.tabOfInputs;
-    //console.log(tab);
-    var num = ob.numberOfInputs;
-
-
-    for (var i = 0; i < num; i++) {
-        var objectTab = {};
-        var subObject = {};
-        tab.forEach((item) => {
-            
-            var a = item.inputField;
-            var subObject = {};
-            if(item.addedSubObject == true) {
-                item.firstSubObject.forEach((it) => {
-                    var b = it.subInputField;
-                    if (it.subSelectOption == "Imię") {
-                        subObject[b] = getRandomName();
-                    }
-                    if (it.subSelectOption == "Nazwisko") {
-                        subObject[b] = getRandomLastName();
-                    }
-                    if (it.subSelectOption == "Email") {
-                        subObject[b] = getRandomEmail();
-                    }
-                    if (it.subSelectOption == "Adres") {
-                        subObject[b] = getRandomAddress();
-                    }
-                    if (it.subSelectOption == "Miasto") {
-                        subObject[b] = getRandomCity();
-                    }
-                    if (it.subSelectOption == "Państwo") {
-                        subObject[b] = getRandomCountry();
-                    }
-                    if (it.subSelectOption == "Id") {
-                        subObject[b] = i + 1;
-                    }
-                    if (it.subSelectOption == "Nr telefonu") {
-                        subObject[b] = getRandomPhone();
-                    }
-                    if (it.subSelectOption == "Wiek") {
-                        subObject[b] = getRandomAge();
-                    }
-                    
-                });
-                objectTab[a] = subObject; 
-                
+    for (var j = 0; j < num; j++) {
+        for (var i = 0; i < values.length; i++) {
+            if (values[i] == 'getRandomName') {
+                newValues[i] = getRandomName();
             }
-            
-            
-            if(item.addedSubObject == false) {
-                if (item.selectOption == "Imię") {
-                    objectTab[a] = getRandomName();
-                }
-                if (item.selectOption == "Nazwisko") {
-                    objectTab[a] = getRandomLastName();
-                }
-                if (item.selectOption == "Email") {
-                    objectTab[a] = getRandomEmail();
-                }
-                if (item.selectOption == "Adres") {
-                    objectTab[a] = getRandomAddress();
-                }
-                if (item.selectOption == "Miasto") {
-                    objectTab[a] = getRandomCity();
-                }
-                if (item.selectOption == "Państwo") {
-                    objectTab[a] = getRandomCountry();
-                }
-                if (item.selectOption == "Id") {
-                    objectTab[a] = i + 1;
-                }
-                if (item.selectOption == "Nr telefonu") {
-                    objectTab[a] = getRandomPhone();
-                }
-                if (item.selectOption == "Wiek") {
-                    objectTab[a] = getRandomAge();
-                }
-                
+            else if (values[i] == 'getRandomLastName') {
+                newValues[i] = getRandomLastName();
             }
-            
-            
-        });
-        // console.log("PO if")
-        //console.log(objectTab)
+            else if (values[i] == 'getRandomEmail') {
+                newValues[i] = getRandomEmail();
+            }
+            else if (values[i] == 'getRandomAddress') {
+                newValues[i] = getRandomAddress();
+            }
+            else if (values[i] == 'getRandomCity') {
+                newValues[i] = getRandomCity();
+            }
+            else if (values[i] == 'getRandomCountry') {
+                newValues[i] = getRandomCountry();
+            }
+            else if (values[i] == 'getRandomPhone') {
+                newValues[i] = getRandomPhone();
+            }
+            else if (values[i] == 'getRandomAge') {
+                newValues[i] = getRandomAge();
+            }
+            else {
+                newValues[i] = values[i]
+            }
+        }
+        //console.log(newValues);
+
+        var ooo =  {};
+
+        for (var k = 0; k < keys.length; k++) {
+            ooo[keys[k]] = newValues[k];
+        }
+
+       // console.log(ooo);
+        arrayOfObjects.push(ooo);
         
-        arrayOfObjects.push(objectTab);
     }
-
-    var arrayJSON = JSON.stringify(arrayOfObjects);
-    //console.log(arrayJSON);
-    var path = './data/random.json';
-    storeData(arrayJSON, path);
+    return arrayOfObjects;
 }
-
-const storeData = (arrayJSON, path) => {
-    try {
-        fs.writeFileSync(path, arrayJSON)
-    } catch (err) {
-        console.error(err)
-    }
-}
-

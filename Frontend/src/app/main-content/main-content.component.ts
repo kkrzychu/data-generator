@@ -12,7 +12,20 @@ export class MainContentComponent implements OnInit {
 
   valid: boolean = false; 
   show: boolean = false;
-  
+  content: any = "hehehe";
+  optionsCodeMirror: any = {
+    value: "#start text",
+    lineNumbers: true,
+    theme: 'dracula',
+    mode: {name: "javascript", json: true},
+    lineWrapping: true,
+    foldGutter: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "CodeMirror-lint-markers"],
+    autoCloseBrackets: true,
+    matchBrackets: true,
+    tabSize: 20
+  }
+  obj;
   subObject: object[] = [];
   arrayOfFields: any[] = [
     {
@@ -58,7 +71,18 @@ export class MainContentComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
+    this.obj= JSON.stringify([{
+      "imie": "getRandomName",
+      "nazwisko": "object",
+      "id": "Object",
+      "email": false,
+      "telefon": "",
+      "adres": "",
+      "Miasto": "Warszawa",
+      "Panstwo": "",
+      "Wiek": "getRandomAge"
+    }], null, ' ');
+    console.log(this.obj);
   }
 
 
@@ -86,12 +110,12 @@ export class MainContentComponent implements OnInit {
   }
 
   generateFile(num) {
-    this.validForm();
+    //this.validForm();
     console.log(this.arrayOfFields);
-    if(this.valid) {
+    if(true) {
       this.show = false;
       let obj = {
-        tabOfInputs: this.arrayOfFields,
+        tabOfInputs: this.obj,
         numberOfInputs: num
       };
       this.fileService.generateFile(obj).subscribe((res: any) => {
@@ -120,7 +144,7 @@ export class MainContentComponent implements OnInit {
           }
         })
       }
-        
+      
       })
   }
 
@@ -135,8 +159,7 @@ export class MainContentComponent implements OnInit {
 
   
   showTest() {
-    this.validForm();
-    console.log(this.arrayOfFields);
+    console.log(this.obj);
   }
 }
 
