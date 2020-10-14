@@ -122,7 +122,7 @@ export class MainContentComponent implements OnInit {
         numberOfInputs: num
       };
       this.fileService.generateFile(obj).subscribe((res: any) => {
-        //saveAs(new Blob([JSON.stringify(res)], {type: "text/plain;charset=utf-8"}), "random.json")
+        saveAs(new Blob([JSON.stringify(res)], {type: "text/plain;charset=utf-8"}), "random.json")
       });
     } else {
       this.show = true;
