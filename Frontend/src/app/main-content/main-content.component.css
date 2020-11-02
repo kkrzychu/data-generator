@@ -40,3 +40,15 @@
 padding-left: 48px;
 }
 
+.card-header {
+    padding: .2rem 1.25rem;
+    background-color: #f8f9fa !important;
+}
+
+.nameTab {
+    font-size: 1.1rem;
+    background-color: #f8f9fa !important;
+    padding: .15rem .5rem;
+    color: #212529;
+    letter-spacing: 1px;
+}

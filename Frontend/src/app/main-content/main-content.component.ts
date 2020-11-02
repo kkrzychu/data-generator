@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FileService } from '../file.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { saveAs } from 'file-saver';
+// 
+
 
 @Component({
   selector: 'app-main-content',
@@ -13,18 +15,22 @@ export class MainContentComponent implements OnInit {
   valid: boolean = false; 
   show: boolean = false;
   content: any = "hehehe";
-  optionsCodeMirror: any = {
-    value: "#start text",
+  optionsCodeMirror: object = {
+    tabSize: 10,
     lineNumbers: true,
-    theme: 'dracula',
+    theme: 'material-ocean',
     mode: {name: "javascript", json: true},
-    lineWrapping: true,
-    foldGutter: true,
-    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "CodeMirror-lint-markers"],
     autoCloseBrackets: true,
     matchBrackets: true,
-    tabSize: 20
-  }
+    extraKeys: {
+      "F11": function(cm) {
+        cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+      },
+      "Esc": function(cm) {
+        if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+      }
+    }
+  } 
   obj;
   subObject: object[] = [];
   arrayOfFields: any[] = [
@@ -63,6 +69,76 @@ export class MainContentComponent implements OnInit {
     "Miasto", 
     "Państwo",
     "Wiek"
+  ];
+
+  functionNameTab: any[] = [
+    {
+      name: 'id',
+      head: 'headingOne',
+      coll: 'collapseOne',
+      desc: 'Funkcja numerująca obiekty'
+    },
+    {
+      name: 'getRandomName',
+      head: 'headingTwo',
+      coll: 'collapseTwo',
+      desc: 'Funkcja generująca losowe imię'
+    },
+    {
+      name: 'getRandomLastName',
+      head: 'headingThree',
+      coll: 'collapseThree',
+      desc: 'Funkcja generująca losowe nazwisko'
+    },
+    {
+      name: 'getRandomEmail',
+      head: 'headingFour',
+      coll: 'collapseFour',
+      desc: 'Funkcja generująca losowy email'
+    },
+    {
+      name: 'getRandomAddress',
+      head: 'headingFive',
+      coll: 'collapseFive',
+      desc: 'Funkcja generująca losowy adres'
+    },
+    {
+      name: 'getRandomCity',
+      head: 'headingSix',
+      coll: 'collapseSix',
+      desc: 'Funkcja generująca losowe miasto'
+    },
+    {
+      name: 'getRandomCountry',
+      head: 'headingSeven',
+      coll: 'collapseSeven',
+      desc: 'Funkcja generująca losowe państwo'
+    },
+    {
+      name: 'getRandomPhone',
+      head: 'headingEight',
+      coll: 'collapseEight',
+      desc: 'Funkcja generująca losowy numer telefonu'
+    },
+    {
+      name: 'getRandomAge',
+      head: 'headingNine',
+      coll: 'collapseNine',
+      desc: 'Funkcja generująca losowy wiek'
+    },
+    {
+      name: 'getRand',
+      head: 'headingTen',
+      coll: 'collapseTen',
+      desc: 'Funkcja zwraca losowe dane z podanych parametrów np. getRand(jeden,dwa,trzy)'
+    },
+    {
+      name: 'draw',
+      head: 'headingEleven',
+      coll: 'collapseEleven',
+      desc: 'Użycie funkcji draw(rand(4-8),@,gmail,rand(1-2)). Metoda rand(4-8) zwróci string o długości od 4 znaków do 8 znaków'
+    },
+    
   ];
 
   constructor(private fileService: FileService, private route: ActivatedRoute, private router: Router) {
@@ -122,7 +198,7 @@ export class MainContentComponent implements OnInit {
         numberOfInputs: num
       };
       this.fileService.generateFile(obj).subscribe((res: any) => {
-        saveAs(new Blob([JSON.stringify(res)], {type: "text/plain;charset=utf-8"}), "random.json")
+        //saveAs(new Blob([JSON.stringify(res)], {type: "text/plain;charset=utf-8"}), "random.json")
       });
     } else {
       this.show = true;
