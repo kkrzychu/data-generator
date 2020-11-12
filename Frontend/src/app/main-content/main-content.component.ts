@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FileService } from '../file.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { saveAs } from 'file-saver';
+import { Tab } from 'src/app/tab.model';
 // 
 
 
@@ -13,6 +14,8 @@ import { saveAs } from 'file-saver';
 export class MainContentComponent implements OnInit {
 
   valid: boolean = false; 
+  listsFromDB = {};
+  textArea;
   show: boolean = false;
   content: any = "hehehe";
   optionsCodeMirror: object = {
@@ -73,72 +76,118 @@ export class MainContentComponent implements OnInit {
 
   functionNameTab: any[] = [
     {
+      name: 'Procentowe wypełnienie danych',
+      head: 'headingZero',
+      coll: 'collapseZero',
+      desc: ['Funkcja ta jest odpowiedzialna za wypełnienie danymi. Użytkownik podaje ile procent danych ma być wygenerowanych, a ile pustych', 
+      'Przykład implementacji: "imie,(80%)": "getRandomName"']
+    },
+    {
       name: 'id',
       head: 'headingOne',
       coll: 'collapseOne',
-      desc: 'Funkcja numerująca obiekty'
-    },
-    {
-      name: 'getRandomName',
-      head: 'headingTwo',
-      coll: 'collapseTwo',
-      desc: 'Funkcja generująca losowe imię'
-    },
-    {
-      name: 'getRandomLastName',
-      head: 'headingThree',
-      coll: 'collapseThree',
-      desc: 'Funkcja generująca losowe nazwisko'
-    },
-    {
-      name: 'getRandomEmail',
-      head: 'headingFour',
-      coll: 'collapseFour',
-      desc: 'Funkcja generująca losowy email'
-    },
-    {
-      name: 'getRandomAddress',
-      head: 'headingFive',
-      coll: 'collapseFive',
-      desc: 'Funkcja generująca losowy adres'
-    },
-    {
-      name: 'getRandomCity',
-      head: 'headingSix',
-      coll: 'collapseSix',
-      desc: 'Funkcja generująca losowe miasto'
-    },
-    {
-      name: 'getRandomCountry',
-      head: 'headingSeven',
-      coll: 'collapseSeven',
-      desc: 'Funkcja generująca losowe państwo'
-    },
-    {
-      name: 'getRandomPhone',
-      head: 'headingEight',
-      coll: 'collapseEight',
-      desc: 'Funkcja generująca losowy numer telefonu'
-    },
-    {
-      name: 'getRandomAge',
-      head: 'headingNine',
-      coll: 'collapseNine',
-      desc: 'Funkcja generująca losowy wiek'
-    },
-    {
-      name: 'getRand',
-      head: 'headingTen',
-      coll: 'collapseTen',
-      desc: 'Funkcja zwraca losowe dane z podanych parametrów np. getRand(jeden,dwa,trzy)'
+      desc: ['Funkcja numerująca obiekty.', 'Przykład implementacji: id']
     },
     {
       name: 'draw',
-      head: 'headingEleven',
-      coll: 'collapseEleven',
-      desc: 'Użycie funkcji draw(rand(4-8),@,gmail,rand(1-2)). Metoda rand(4-8) zwróci string o długości od 4 znaków do 8 znaków'
+      head: 'headingTwo',
+      coll: 'collapseTwo',
+      desc: ['Funkcja zwraca losowo wygenerowany string w zależności od podanych argumentów przez użytkownika. Argumenty są podawane po przecinku. Metoda randStr() wygeneruje string z losowo wybranych znaków alfabetu oraz długości podanej przez użytkownika, metoda randNum() wygenruje string skłdający się z cyfr z podanego przedziału przez użytkownika oraz użytkownik może sam podać string, który będzie łączyny z innymi argumentami',
+      'Przykład implementacji: draw(randStr(3-8),randNum(1-10),@,randStr(2-4),.,randStr(1-2))']
+    },
+    {
+      name: 'getRand',
+      head: 'headingThree',
+      coll: 'collapseThree',
+      desc: ['Funkcja zwraca losowo wybrany string z podanych parametrów.', 
+      'Przykład implementacji: getRand(styczeń,kwiecień,wrzesień)']
+    },
+    {
+      name: 'getRandomAge',
+      head: 'headingFour',
+      coll: 'collapseFour',
+      desc: ['Funkcja zwraca losowo wygenrowany wiek z przedziału od 1 do 100',
+            'Przykład implementacji: getRandomAge']
+    },
+    {
+      name: 'getRandomPhone',
+      head: 'headingFive',
+      coll: 'collapseFive',
+      desc: ['Funkcja zwraca losowy wygenerowany numer telefonu z przedziału od 100000000 do 999999999',
+      'Przykład implementacji: getRandomPhone']
+    },
+    {
+      name: 'getRandomBoolean',
+      head: 'headingSix',
+      coll: 'collapseSix',
+      desc: ['Funkcja zwraca losowo wartość true lub false', 'Przykład implementacji: getRandomBoolean']
+    },
+    {
+      name: 'getRandomIntNumber',
+      head: 'headingSeven',
+      coll: 'collapseSeven',
+      desc: ['Funkcja zwraca losową liczbę całkowitą z podango przedziału przez użytkownika',
+      'Przykład implementacji: getRandomIntNumber(10-40)']
+    },
+    {
+      name: 'getRandomFloatNumber',
+      head: 'headingEight',
+      coll: 'collapseEight',
+      desc: ['Funkcja zwraca losową liczbę zmiennoprzecinkową z podango przedziału przez użytkownika',
+      'Przykład implementacji: getRandomFloatNumber(2000-3000)']
     },
     
+  ];
+
+  tabToChange: any[] = [
+    {
+      name: 'getRandomName',
+      head: 'headingNine',
+      coll: 'collapseNine',
+      desc: '',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowane imię',
+      desc3: 'Przykład implementacji: getRandomName'
+    },
+    {
+      name: 'getRandomLastName',
+      head: 'headingTen',
+      coll: 'collapseTen',
+      desc: 'Funkcja generująca losowe nazwisko',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowane nazwisko',
+      desc3: 'Przykład implementacji: getRandomLastName'
+    },
+    {
+      name: 'getRandomEmail',
+      head: 'headingEleven',
+      coll: 'collapseEleven',
+      desc: 'Funkcja generująca losowy email',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowany email',
+      desc3: 'Przykład implementacji: getRandomEmail'
+    },
+    {
+      name: 'getRandomAddress',
+      head: 'headingTwelve',
+      coll: 'collapseTwelve',
+      desc: 'Funkcja generująca losowy adres',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowany adres',
+      desc3: 'Przykład implementacji: getRandomAddress'
+    },
+    {
+      name: 'getRandomCity',
+      head: 'headingThirten',
+      coll: 'collapseThirten',
+      desc: 'Funkcja generująca losowe miasto',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowana nazwa miasta',
+      desc3: 'Przykład implementacji: getRandomCity'
+    },
+    {
+      name: 'getRandomCountry',
+      head: 'headingFourteen',
+      coll: 'collapseFourteen',
+      desc: 'Funkcja generująca losowe państwo',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowana nazwa państwa',
+      desc3: 'Przykład implementacji: getRandomCountry'
+    }
   ];
 
   constructor(private fileService: FileService, private route: ActivatedRoute, private router: Router) {
@@ -147,21 +196,67 @@ export class MainContentComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.fileService.getLists().subscribe((response) => {
+      // console.log(response);
+      this.listsFromDB = response;
+      console.log(this.listsFromDB[0].tab[0]);
+      this.tabToChange[0].desc = this.listsFromDB[0].tab;
+      this.tabToChange[1].desc = this.listsFromDB[1].tab;
+      this.tabToChange[2].desc = this.listsFromDB[2].tab;
+      this.tabToChange[3].desc = this.listsFromDB[5].tab;
+      this.tabToChange[4].desc = this.listsFromDB[4].tab;
+      this.tabToChange[5].desc = this.listsFromDB[3].tab;
+      // this.textArea = this.listsFromDB[0].tab;
+    })
+    
     this.obj= JSON.stringify([{
-      "imie": "getRandomName",
-      "nazwisko": ['naz1', 'naz2', 'naz3'],
-      "id": "Object",
-      "email": false,
-      "telefon": "",
-      "adres": {
-        "ulica": "aaaa",
-        "dom": 12
+      "id": "id",
+      "imie,(80%)": "getRandomName",
+      "nazwisko,(30%)": ['getRandomLastName', 'naz2', 'getRandomLastName'],
+      "dane": {
+        "telefon": 
+        [
+          {
+            "imie": "getRandomName",
+            "tel": "getRandomPhone",
+            "email,(60%)": ["getRandomEmail", "draw(randStr(3-8),randNum(1-10),@,randStr(2-4),.,randStr(1-2)"]
+          },
+          {
+            "imie": "getRandomName",
+            "tel": "getRandomPhone",
+            "email": "getRandomEmail"
+          },
+          {
+            "imie": "getRandomName",
+            "tel,(80%)": "getRandomPhone",
+            "email": "getRandomEmail"
+          },
+        ]
       },
-      "Miasto": "Warszawa",
-      "Panstwo": "",
-      "Wiek": "getRandomAge"
+      "adres": {
+        "ulica,(70%)": "getRandomAddress",
+        "miasto": "getRandomCity",
+        "panstwo": "getRandomCountry"
+      },
+      "osoba,(90%)": {
+        "imie": ["getRandomName", "Piotr"],
+        "wiek": "getRandomAge",
+        "bool,(50%)": "getRandomBoolean",
+        "wyplata": {
+          "miesiac": ["getRand(styczeń,kwiecień,wrzesień)", "getRandomFloatNumber(2000-3000)"],
+          "pracownik": {
+            "id": "getRandomIntNumber(10-40)",
+            "hasła": 
+            [
+              {"has1": "draw(randStr(3-9),@#$,randNum(70-100),qwerty)"},
+              {"has2": "draw(randStr(3-9),@#$,randNum(70-100),qwerty)"},
+              {"has3,(40%)": "draw(randStr(3-9),@#$,randNum(70-100),qwerty)"},
+            ]
+          }
+        }
+      }
     }], null, ' ');
-    console.log(this.obj);
+    
   }
 
 
@@ -190,15 +285,17 @@ export class MainContentComponent implements OnInit {
 
   generateFile(num) {
     //this.validForm();
-    console.log(this.arrayOfFields);
+    // console.log(this.arrayOfFields);
+    console.log(this.tabToChange);
     if(true) {
       this.show = false;
       let obj = {
         tabOfInputs: this.obj,
-        numberOfInputs: num
+        numberOfInputs: num,
+        tabOfData: this.tabToChange
       };
       this.fileService.generateFile(obj).subscribe((res: any) => {
-        //saveAs(new Blob([JSON.stringify(res)], {type: "text/plain;charset=utf-8"}), "random.json")
+        saveAs(new Blob([JSON.stringify(res)], {type: "text/plain;charset=utf-8"}), "random.json")
       });
     } else {
       this.show = true;

@@ -22,10 +22,34 @@
               
                   <div id="{{item.coll}}" class="collapse " attr.aria-labelledby="{{item.head}}" data-parent="#accordionExample">
                     <div class="card-body">
-                        {{item.desc}}
+                        {{item.desc[0]}}
+                        <hr>
+                        <h6>{{item.desc[1]}}</h6>
                     </div>
                   </div>
                 </div>
+
+<!-- Tablice do zmiany dla uzytkownika -->
+                <div class="card" *ngFor="let item of tabToChange" >
+                    <div class="card-header bg-light" id="{{item.head}}">
+                      
+                        <div class="nameTab" type="button" data-toggle="collapse" attr.data-target="#{{item.coll}}"  attr.aria-controls="{{item.coll}}">
+                          {{item.name}}
+                        </div>
+                      
+                    </div>
+                
+                    <div id="{{item.coll}}" class="collapse " attr.aria-labelledby="{{item.head}}" data-parent="#accordionExample">
+                      <div class="card-body">
+                          <!-- {{item.desc}} -->
+                          <h6>{{item.desc2}}</h6>
+                          <br>
+                          <textarea [(ngModel)]="item.desc" cols="65" rows="10"></textarea>
+                          <br>
+                          <h6>{{item.desc3}}</h6>
+                      </div>
+                    </div>
+                  </div>
                 
               </div>
         </div>

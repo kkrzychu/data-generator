@@ -36,15 +36,60 @@ app.use(function (req, res, next) {
 
 
 
+async function fulllTab() {
+    let fName =  await FirstName.find();
+    let lName =  await LastName.find();
+    let em =  await Email.find();
+    let co =  await Country.find();
+    let ci =  await City.find();
+    let ad =  await Address.find();
+    let newFname = new Array();
+    let lnam = new Array();
+    let ema = new Array();
+    let cou = new Array();
+    let cit = new Array();
+    let adr = new Array();
+    let allTable = new Array();
+    
+    for(let i=0;i<fName.length;i++) { newFname[i] = fName[i].firstName; }
+    for(let i=0;i<lName.length;i++) { lnam[i] = lName[i].lastName; }
+    for(let i=0;i<em.length;i++) { ema[i] = em[i].email; }
+    for(let i=0;i<co.length;i++) { cou[i] = co[i].country; }
+    for(let i=0;i<ci.length;i++) { cit[i] = ci[i].city; }
+    for(let i=0;i<ad.length;i++) { adr[i] = ad[i].address; }
+
+    allTable.push({type: 'firstName', tab: newFname});
+    allTable.push({type: 'lastName', tab: lnam});
+    allTable.push({type: 'email', tab: ema});
+    allTable.push({type: 'country', tab: cou});
+    allTable.push({type: 'city', tab: cit});
+    allTable.push({type: 'address', tab: adr});
+
+    return allTable;
+}
+
+app.get('/generator', (req, res) => {
+    fulllTab().then((o) => {
+        // console.log(o);
+        res.send(o);
+    })
+    
+})
+
+//ZMIENNA ZAWIERA NOWE DANE W TABLICY DO LOSOWANIA
+let tabOfDataToDraw;
+let idNumber = 0;
+
 app.post('/generator', (req, res) => {
     let objectPOST = req.body.obj;
-
-    //console.log(objectPOST);
+    tabOfDataToDraw = objectPOST.tabOfData;
+    // console.log(tabOfDataToDraw);
 
     // newRandomData(objectPOST).then((ob) => {
     randomData(objectPOST).then((ob) => {
-        //console.log(ob);
+        // console.log(ob);
         //res.download('./data/random.json', 'random.json');
+        idNumber = 0;
         res.send(ob);
     });
 
@@ -160,7 +205,7 @@ async function getValueFunction(initialValue) {
     return initialValue;
 }
 
-let idNumber = 0;
+
 
 async function randomData(ob) {
 
@@ -175,6 +220,7 @@ async function randomData(ob) {
     var subObject = new Array();
     var fillKeys = new Array();
     var num = ob.numberOfInputs;
+    console.log(num);
     var x = new Array();
     var testValues = new Array();
 
@@ -220,7 +266,7 @@ async function randomData(ob) {
     var x = await fillTab(arrayOfObjects);
     // console.log(x);
     //}
-    idNumber = 0;
+    
     // //PODZIAŁ KLUCZA NA WARTOŚĆ I PROCENTY
     // for(var v=0;v<keys.length;v++) {
     //     var splitTab = keys[v].split(',');
@@ -288,7 +334,7 @@ async function checkArray(testValues,) {
     for (var i = 0; i < testValues.length; i++) {
 
 
-        if (testValues[i] === 'id()') {
+        if (testValues[i] === 'id') {
             newValues[i] = await id();
         }
         else if (testValues[i] === 'getRandomName') {
@@ -315,9 +361,16 @@ async function checkArray(testValues,) {
         else if (testValues[i] === 'getRandomAge') {
             newValues[i] = await getRandomAge();
         }
-        else if (testValues[i].toString().substring(0, 15) === "getRandomNumber" && !Array.isArray(testValues[i])) {
-            let str = testValues[i].toString().substring(16, testValues[i].length - 1).split('-');
-            newValues[i] = await getRandomNumber(str);
+        else if (testValues[i] === 'getRandomBoolean') {
+            newValues[i] = await getRandomBoolean();
+        }
+        else if (testValues[i].toString().substring(0, 18) === "getRandomIntNumber" && !Array.isArray(testValues[i])) {
+            let str = testValues[i].toString().substring(19, testValues[i].length - 1).split('-');
+            newValues[i] = await getRandomIntNumber(str);
+        }
+        else if (testValues[i].toString().substring(0, 20) === "getRandomFloatNumber" && !Array.isArray(testValues[i])) {
+            let str = testValues[i].toString().substring(21, testValues[i].length - 1).split('-');
+            newValues[i] = await getRandomFloatNumber(str);
         }
         else if (testValues[i].toString().substring(0, 7) === "getRand" && !Array.isArray(testValues[i])) {
             let str = testValues[i].toString().substring(8, testValues[i].length - 1).split(',');
@@ -669,7 +722,7 @@ async function draw(str) {
     for (let i = 0; i < data.length; i++) {
         finish += data[i];
     }
-    console.log(finish);
+    // console.log(finish);
     return finish;
 }
 
@@ -680,7 +733,7 @@ async function id() {
     return idNumber;
 }
 
-async function getRandomNumber(str) {
+async function getRandomIntNumber(str) {
 
     if(str.length === 2) {
         return Math.floor(Math.random() * (parseInt(str[1]) - parseInt(str[0]) + 1) + parseInt(str[0]));
@@ -690,76 +743,140 @@ async function getRandomNumber(str) {
     
 }
 
+async function getRandomFloatNumber(str) {
+
+    let multipler = 100;
+    if(str.length === 2) {
+        let num = Math.random() * (parseFloat(str[1]) - parseFloat(str[0]) + 1) + parseFloat(str[0]) ;
+        return Math.round(num * multipler) / multipler;
+    }else {
+        let num2 = Math.random() * parseFloat(str[0]);
+        return Math.round(num2 * multipler) / multipler;
+    }
+
+}
+
 async function getRandomName() {
     // ARRAY OF NAMES
     var tabName = await FirstName.find();
     var tabFirstName = new Array();
 
-    for (var i = 0; i < tabName.length; i++) {
-        tabFirstName[i] = tabName[i].firstName;
+    // for (var i = 0; i < tabName.length; i++) {
+    //     tabFirstName[i] = tabName[i].firstName;
+    // }
+    if(Array.isArray(tabOfDataToDraw[0].desc)) {
+        tabFirstName = tabOfDataToDraw[0].desc;
+        // console.log(tabFirstName);
+        return tabFirstName[Math.floor(Math.random() * tabFirstName.length)];
+    } else {
+        tabFirstName = tabOfDataToDraw[0].desc.split(",");
+        // console.log(tabFirstName);
+        return tabFirstName[Math.floor(Math.random() * tabFirstName.length)];
     }
+    
 
-    return tabFirstName[Math.floor(Math.random() * tabFirstName.length)];
+    
 }
 
 async function getRandomLastName() {
     // ARRAY OF LAST NAMES
     var tabLName = await LastName.find();
     var tabLastName = new Array();
-    for (var i = 0; i < tabLName.length; i++) {
-        tabLastName[i] = tabLName[i].lastName;
-    }
+    // for (var i = 0; i < tabLName.length; i++) {
+    //     tabLastName[i] = tabLName[i].lastName;
+    // }
     // GENERATE RANDOM LAST NAMES 
 
-    return tabLastName[Math.floor(Math.random() * tabLastName.length)];
+    if(Array.isArray(tabOfDataToDraw[1].desc)) {
+        tabLastName = tabOfDataToDraw[1].desc;
+        // console.log(tabFirstName);
+        return tabLastName[Math.floor(Math.random() * tabLastName.length)];
+    } else {
+        tabLastName = tabOfDataToDraw[1].desc.split(",");
+        // console.log(tabFirstName);
+        return tabLastName[Math.floor(Math.random() * tabLastName.length)];
+    }
+    // return tabLastName[Math.floor(Math.random() * tabLastName.length)];
 }
 
 async function getRandomAddress() {
     // ARRAY OF ADDRESS
     var tabAddress = await Address.find();
     var tabOfAddress = new Array();
-    for (var i = 0; i < tabAddress.length; i++) {
-        tabOfAddress[i] = tabAddress[i].address;
-    }
+    // for (var i = 0; i < tabAddress.length; i++) {
+    //     tabOfAddress[i] = tabAddress[i].address;
+    // }
     // GENERATE RANDOM ADDRESS 
-
-    return tabOfAddress[Math.floor(Math.random() * tabOfAddress.length)];
+    if(Array.isArray(tabOfDataToDraw[3].desc)) {
+        tabOfAddress = tabOfDataToDraw[3].desc;
+        // console.log(tabFirstName);
+        return tabOfAddress[Math.floor(Math.random() * tabOfAddress.length)];
+    } else {
+        tabOfAddress = tabOfDataToDraw[3].desc.split(",");
+        // console.log(tabFirstName);
+        return tabOfAddress[Math.floor(Math.random() * tabOfAddress.length)];
+    }
+    // return tabOfAddress[Math.floor(Math.random() * tabOfAddress.length)];
 }
 
 async function getRandomCity() {
     // ARRAY OF CITIES
     var tabCity = await City.find();
     var tabOfCity = new Array();
-    for (var i = 0; i < tabCity.length; i++) {
-        tabOfCity[i] = tabCity[i].city;
-    }
+    // for (var i = 0; i < tabCity.length; i++) {
+    //     tabOfCity[i] = tabCity[i].city;
+    // }
     // GENERATE RANDOM CITY 
-
-    return tabOfCity[Math.floor(Math.random() * tabOfCity.length)];
+    if(Array.isArray(tabOfDataToDraw[4].desc)) {
+        tabOfCity = tabOfDataToDraw[4].desc;
+        // console.log(tabFirstName);
+        return tabOfCity[Math.floor(Math.random() * tabOfCity.length)];
+    } else {
+        tabOfCity = tabOfDataToDraw[4].desc.split(",");
+        // console.log(tabFirstName);
+        return tabOfCity[Math.floor(Math.random() * tabOfCity.length)];
+    }
+    // return tabOfCity[Math.floor(Math.random() * tabOfCity.length)];
 }
 
 async function getRandomCountry() {
     // ARRAY OF COUNTRY
     var tabCountry = await Country.find();
     var tabOfCountry = new Array();
-    for (var i = 0; i < tabCountry.length; i++) {
-        tabOfCountry[i] = tabCountry[i].country;
-    }
+    // for (var i = 0; i < tabCountry.length; i++) {
+    //     tabOfCountry[i] = tabCountry[i].country;
+    // }
     // GENERATE RANDOM COUNTRY 
-
-    return tabOfCountry[Math.floor(Math.random() * tabOfCountry.length)];
+    if(Array.isArray(tabOfDataToDraw[5].desc)) {
+        tabOfCountry = tabOfDataToDraw[5].desc;
+        // console.log(tabFirstName);
+        return tabOfCountry[Math.floor(Math.random() * tabOfCountry.length)];
+    } else {
+        tabOfCountry = tabOfDataToDraw[5].desc.split(",");
+        // console.log(tabFirstName);
+        return tabOfCountry[Math.floor(Math.random() * tabOfCountry.length)];
+    }
+    // return tabOfCountry[Math.floor(Math.random() * tabOfCountry.length)];
 }
 
 async function getRandomEmail() {
     // ARRAY OF EMAIL
     var tabEmail = await Email.find();
     var tabOfEmail = new Array();
-    for (var i = 0; i < tabEmail.length; i++) {
-        tabOfEmail[i] = tabEmail[i].email;
-    }
+    // for (var i = 0; i < tabEmail.length; i++) {
+    //     tabOfEmail[i] = tabEmail[i].email;
+    // }
     // GENERATE RANDOM EMAIL 
-
-    return tabOfEmail[Math.floor(Math.random() * tabOfEmail.length)];
+    if(Array.isArray(tabOfDataToDraw[2].desc)) {
+        tabOfEmail = tabOfDataToDraw[3].desc;
+        // console.log(tabFirstName);
+        return tabOfEmail[Math.floor(Math.random() * tabOfEmail.length)];
+    } else {
+        tabOfEmail = tabOfDataToDraw[2].desc.split(",");
+        // console.log(tabFirstName);
+        return tabOfEmail[Math.floor(Math.random() * tabOfEmail.length)];
+    }
+    // return tabOfEmail[Math.floor(Math.random() * tabOfEmail.length)];
 }
 
 async function getRandomPhone() {
@@ -780,7 +897,13 @@ async function getRandomAge() {
 
 }
 
+async function getRandomBoolean() {
+    let boolTab = new Array();
+    boolTab.push(true);
+    boolTab.push(false);
 
+    return boolTab[Math.floor(Math.random() * boolTab.length)];
+}
 
 // const storeData = (arrayJSON, path) => {
 //     try {
