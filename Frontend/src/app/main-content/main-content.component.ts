@@ -36,43 +36,6 @@ export class MainContentComponent implements OnInit {
   } 
   obj;
   subObject: object[] = [];
-  arrayOfFields: any[] = [
-    {
-      inputField: '',
-      selectOption: '',
-      firstSubObject: [],
-      addedSubObject: false
-    },
-    {
-      inputField: '',
-      selectOption: '',
-      firstSubObject: [],
-      addedSubObject: false
-    },
-    {
-      inputField: '',
-      selectOption: '',
-      firstSubObject: [],
-      addedSubObject: false
-    },
-    {
-      inputField: '',
-      selectOption: '',
-      firstSubObject: [],
-      addedSubObject: false
-    }
-  ]
-  options: string[] = [
-    "Imię", 
-    "Nazwisko", 
-    "Id", 
-    "Email", 
-    "Nr telefonu", 
-    "Adres", 
-    "Miasto", 
-    "Państwo",
-    "Wiek"
-  ];
 
   functionNameTab: any[] = [
     {
@@ -206,7 +169,6 @@ export class MainContentComponent implements OnInit {
       this.tabToChange[3].desc = this.listsFromDB[5].tab;
       this.tabToChange[4].desc = this.listsFromDB[4].tab;
       this.tabToChange[5].desc = this.listsFromDB[3].tab;
-      // this.textArea = this.listsFromDB[0].tab;
     })
     
     this.obj= JSON.stringify([{
@@ -260,31 +222,8 @@ export class MainContentComponent implements OnInit {
   }
 
 
-  addField() {
-    this.arrayOfFields.push({
-      inputField: '',
-      selectOption: '',
-      firstSubObject: [],
-      addedSubObject: false
-    });
-    
-  }
-
-  deleteField(item) {
-    this.arrayOfFields = this.arrayOfFields.filter( e => e!== item);
-    console.log(item);
-  }
-
-  deleteSubField(item, num) {
-    this.arrayOfFields[num].firstSubObject = this.arrayOfFields[num].firstSubObject.filter( e => e!==item);
-    if(this.arrayOfFields[num].firstSubObject.length == 0) {
-      this.arrayOfFields[num].addedSubObject = false;
-    }
-    console.log(num);
-  }
 
   generateFile(num) {
-    //this.validForm();
     // console.log(this.arrayOfFields);
     console.log(this.tabToChange);
     if(true) {
@@ -300,37 +239,6 @@ export class MainContentComponent implements OnInit {
     } else {
       this.show = true;
     }
-  }
-
-  validForm() {
-    this.arrayOfFields.forEach((item) => {
-    
-      if(item.addedSubObject == false) {
-        if(item.inputField == "" || item.selectOption == "") {
-          this.valid = false;
-        } else {
-          this.valid = true;
-        }
-      } else {
-        item.firstSubObject.forEach((it) => {
-          if(item.inputField == "" || it.subInputField == "" || it.subSelectOption == "") {
-            this.valid = false;
-          } else {
-            this.valid = true;
-          }
-        })
-      }
-      
-      })
-  }
-
-  addSubObject(item) {
-    item.firstSubObject.push({
-      subInputField: '',
-      subSelectOption: ''
-    });
-    item.addedSubObject = true;
-    item.inputField = '';
   }
 
   
