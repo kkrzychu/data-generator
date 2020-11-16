@@ -1,0 +1,16 @@
+//ZAINSTALOWAĆ 
+
+ANGULAR CLI 9.1.0
+NODEJS V13.12.0
+MONGODB 4.2.5
+
+1. w konsoli przejść do folderu frontend
+2. wpisać polecenie npm i
+3. przejść do folderu backend
+4. wpisac polecenie npm i
+5. przejsc do pliku backend/app.js
+6. odkomentować funkcję dataDB(). Służy do wypełnienia bazy danych
+7. uruchomić serwer -> w konsoli przejść do folderu backend i wpisać polecenie node app.js 
+8. zakomentować funkcję dataDB() i ponownie uruchomić serwer poleceniem node app.js
+9. otworzyć drugą konsolę przejść do folderu frontend i wpisać polecenie ng serve
+10. w przeglądarce wpisać http://localhost:4200/generator
