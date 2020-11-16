@@ -1,8 +1,16 @@
 //ZAINSTALOWAĆ 
 
-ANGULAR CLI 9.1.0
+ANGULAR CLI 9.1.0 
+polecenie -> npm install -g @angular/cli@9.1.0
+------------------------------------------------------
 NODEJS V13.12.0
-MONGODB 4.2.5
+https://nodejs.org/en/download/releases/
+Pobrać wersję 13.12.0
+------------------------------------------------------
+MONGODB 4.2
+https://www.mongodb.com/try/download/community?tck=docs_server
+------------------------------------------------------
+
 
 1. w konsoli przejść do folderu frontend
 2. wpisać polecenie npm i
