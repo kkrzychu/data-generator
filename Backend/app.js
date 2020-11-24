@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const dataDB = require('./seed');
 const fs = require('fs');
+// const path = require('path');
 
 
 const FirstName = require('./models/firstName');
@@ -41,18 +42,34 @@ app.get('/generator', (req, res) => {
     })
 })
 
+
+
 //ZMIENNA ZAWIERA NOWE DANE W TABLICY DO LOSOWANIA
 let tabOfDataToDraw;
 let idNumber = 0;
 
+
+
 app.post('/generator', (req, res) => {
     let objectPOST = req.body.obj;
     tabOfDataToDraw = objectPOST.tabOfData;
-
-    randomData(objectPOST).then((ob) => {
-        idNumber = 0;
-        res.send(ob);
+    idNumber = 0;
+    fs.open('./data/random.json', 'w', (err, file) => {
+        if (err) {
+            throw err;
+        }
     });
+    randomData(objectPOST).then((ob) => {
+
+        res.download('./data/random.json', "random.json", (err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("sendFile");
+            }
+        })
+    });
+
 
 })
 
@@ -72,6 +89,7 @@ async function randomData(ob) {
     var num = ob.numberOfInputs;
     var x = new Array();
     var testValues = new Array();
+    var path = './data/random.json';
 
     //PODZIAŁ NA KLUCZE I WARTOŚCI
     for (var z = 0; z < obj.length; z++) {
@@ -81,30 +99,110 @@ async function randomData(ob) {
         testValues.push(t[1]);
     }
 
+    fs.appendFileSync(path, '[');
 
     //FUNKCJA SPRAWDZA DANE - TABLICA, OBIEKT, ZWYKLA ZMIENNA
     //TWORZY GOTOWA LISTE OBIEKTOW
-    for (let ww = 0; ww < num; ww++) {
-        var y = await checkArray(testValues);
-        var ooo = {};
 
-        for (var k = 0; k < keys.length; k++) {
-            ooo[keys[k]] = y[k];
+    if (num < 10000) {
+        console.log("Less than 10000");
+        for (let ww = 0; ww < num; ww++) {
+            var y = await checkArray(testValues);
+            var ooo = {};
+
+            for (var k = 0; k < keys.length; k++) {
+                ooo[keys[k]] = y[k];
+            }
+            arrayOfObjects.push(ooo);
         }
-        arrayOfObjects.push(ooo);
+
+        x = await fillTab(arrayOfObjects);
+
+        storeData(x, path);
+
+    } else {
+        let i = 10000;
+        let count = 0;
+        let numLoop = Math.ceil(num / 10000);
+        console.log("More than 10000");
+        while (count < numLoop) {
+            if (count === numLoop - 1 && num % 10000 != 0) {
+                i = num % 10000;
+            } else {
+                i = 10000;
+            }
+            for (let ww = 0; ww < i; ww++) {
+                var y = await checkArray(testValues);
+                var ooo = {};
+
+                for (var k = 0; k < keys.length; k++) {
+                    ooo[keys[k]] = y[k];
+                }
+                arrayOfObjects.push(ooo);
+            }
+
+            x = await fillTab(arrayOfObjects);
+            console.log("Zapis nr: " + count);
+            x.forEach((item) => {
+
+                if (count === numLoop - 1 && x[x.length - 1] === item) {
+                    fs.appendFileSync(path, JSON.stringify(item), function (err) {
+                        if (err) throw err;
+                        console.log('added data to not empty file');
+                    });
+                } else {
+                    fs.appendFileSync(path, JSON.stringify(item) + ",", function (err) {
+                        if (err) throw err;
+                        console.log('added data to not empty file');
+                    });
+                }
+
+
+            })
+
+
+            count++;
+            arrayOfObjects = [];
+        }
+        fs.appendFileSync(path, "]", function (err) {
+            if (err) throw err;
+            console.log('added data to not empty file');
+        });
     }
 
-    var x = await fillTab(arrayOfObjects);
-
     return x;
+
+
 }
+
+function storeData(data, path) {
+
+    data.forEach((item) => {
+
+        if (data[data.length - 1] === item) {
+            fs.appendFileSync(path, JSON.stringify(item) + "]", function (err) {
+                if (err) throw err;
+                console.log('added data to not empty file');
+            });
+        } else {
+            fs.appendFileSync(path, JSON.stringify(item) + ",", function (err) {
+                if (err) throw err;
+                console.log('added data to not empty file');
+            });
+        }
+
+
+    })
+    console.log("added data");
+
+}
+
 
 //FUNKCJA SPRAWDZA PODANE WARTOSCI I ZWRACA NOWE 
 async function checkArray(testValues,) {
 
     var newValues = new Array();
     for (var i = 0; i < testValues.length; i++) {
-
         if (testValues[i] === 'id') {
             newValues[i] = await id();
         }
@@ -135,6 +233,10 @@ async function checkArray(testValues,) {
         else if (testValues[i] === 'getRandomBoolean') {
             newValues[i] = await getRandomBoolean();
         }
+        else if (testValues[i].toString().substring(0, 15) === "getRandomString" && !Array.isArray(testValues[i])) {
+            let str = testValues[i].toString().substring(16, testValues[i].length - 1).split(',');
+            newValues[i] = await getRandomString(str);
+        }
         else if (testValues[i].toString().substring(0, 18) === "getRandomIntNumber" && !Array.isArray(testValues[i])) {
             let str = testValues[i].toString().substring(19, testValues[i].length - 1).split('-');
             newValues[i] = await getRandomIntNumber(str);
@@ -146,10 +248,6 @@ async function checkArray(testValues,) {
         else if (testValues[i].toString().substring(0, 7) === "getRand" && !Array.isArray(testValues[i])) {
             let str = testValues[i].toString().substring(8, testValues[i].length - 1).split(',');
             newValues[i] = await getRand(str);
-        }
-        else if (testValues[i].toString().substring(0, 4) === "draw" && !Array.isArray(testValues[i])) {
-            let str = testValues[i].toString().substring(5, testValues[i].length - 1).split(',');
-            newValues[i] = await draw(str);
         }
         else if (Array.isArray(testValues[i])) {
 
@@ -344,7 +442,7 @@ async function getRand(randTab) {
 }
 
 //GENEROWANIE STRINGU Z LOSOWYCH ZNAKOW
-async function draw(str) {
+async function getRandomString(str) {
 
     const randString = () => {
         let s = "";

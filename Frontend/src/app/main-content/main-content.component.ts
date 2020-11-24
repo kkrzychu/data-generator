@@ -3,6 +3,7 @@ import { FileService } from '../file.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { saveAs } from 'file-saver';
 import { Tab } from 'src/app/tab.model';
+import { HttpClient } from '@angular/common/http';
 // 
 
 
@@ -52,11 +53,11 @@ export class MainContentComponent implements OnInit {
       desc: ['Funkcja numerująca obiekty.', 'Przykład implementacji: id']
     },
     {
-      name: 'draw',
+      name: 'getRandomString',
       head: 'headingTwo',
       coll: 'collapseTwo',
-      desc: ['Funkcja zwraca losowo wygenerowany string w zależności od podanych argumentów przez użytkownika. Argumenty są podawane po przecinku. Metoda randStr() wygeneruje string z losowo wybranych znaków alfabetu oraz długości podanej przez użytkownika, metoda randNum() wygenruje string skłdający się z cyfr z podanego przedziału przez użytkownika oraz użytkownik może sam podać string, który będzie łączyny z innymi argumentami',
-      'Przykład implementacji: draw(randStr(3-8),randNum(1-10),@,randStr(2-4),.,randStr(1-2))']
+      desc: ['Funkcja zwraca losowo wygenerowany string w zależności od podanych argumentów przez użytkownika. Argumenty są podawane po przecinku. Metoda randStr() wygeneruje string z losowo wybranych znaków alfabetu oraz długości podanej przez użytkownika, metoda randNum() wygeneruje string składający się z cyfr z podanego przedziału przez użytkownika oraz użytkownik może sam podać string, który będzie łączyny z innymi argumentami',
+      'Przykład implementacji: getRandomString(randStr(3-8),randNum(1-10),@,randStr(2-4),.,randStr(1-2))']
     },
     {
       name: 'getRand',
@@ -69,7 +70,7 @@ export class MainContentComponent implements OnInit {
       name: 'getRandomAge',
       head: 'headingFour',
       coll: 'collapseFour',
-      desc: ['Funkcja zwraca losowo wygenrowany wiek z przedziału od 1 do 100',
+      desc: ['Funkcja zwraca losowo wygenerowany wiek z przedziału od 1 do 100',
             'Przykład implementacji: getRandomAge']
     },
     {
@@ -89,14 +90,14 @@ export class MainContentComponent implements OnInit {
       name: 'getRandomIntNumber',
       head: 'headingSeven',
       coll: 'collapseSeven',
-      desc: ['Funkcja zwraca losową liczbę całkowitą z podango przedziału przez użytkownika',
+      desc: ['Funkcja zwraca losową liczbę całkowitą z podanego przedziału przez użytkownika',
       'Przykład implementacji: getRandomIntNumber(10-40)']
     },
     {
       name: 'getRandomFloatNumber',
       head: 'headingEight',
       coll: 'collapseEight',
-      desc: ['Funkcja zwraca losową liczbę zmiennoprzecinkową z podango przedziału przez użytkownika',
+      desc: ['Funkcja zwraca losową liczbę zmiennoprzecinkową z podanego przedziału przez użytkownika',
       'Przykład implementacji: getRandomFloatNumber(2000-3000)']
     },
     
@@ -152,8 +153,9 @@ export class MainContentComponent implements OnInit {
       desc3: 'Przykład implementacji: getRandomCountry'
     }
   ];
+  
 
-  constructor(private fileService: FileService, private route: ActivatedRoute, private router: Router) {
+  constructor(private http: HttpClient, private fileService: FileService, private route: ActivatedRoute, private router: Router) {
     
    }
 
@@ -162,7 +164,7 @@ export class MainContentComponent implements OnInit {
     this.fileService.getLists().subscribe((response) => {
       // console.log(response);
       this.listsFromDB = response;
-      console.log(this.listsFromDB[0].tab[0]);
+      // console.log(this.listsFromDB[0].tab[0]);
       this.tabToChange[0].desc = this.listsFromDB[0].tab;
       this.tabToChange[1].desc = this.listsFromDB[1].tab;
       this.tabToChange[2].desc = this.listsFromDB[2].tab;
@@ -181,7 +183,7 @@ export class MainContentComponent implements OnInit {
           {
             "imie": "getRandomName",
             "tel": "getRandomPhone",
-            "email,(60%)": ["getRandomEmail", "draw(randStr(3-8),randNum(1-10),@,randStr(2-4),.,randStr(1-2)"]
+            "email,(60%)": ["getRandomEmail", "getRandomString(randStr(3-8),randNum(1-10),@,randStr(2-4),.,randStr(1-2)"]
           },
           {
             "imie": "getRandomName",
@@ -210,9 +212,9 @@ export class MainContentComponent implements OnInit {
             "id": "getRandomIntNumber(10-40)",
             "hasła": 
             [
-              {"has1": "draw(randStr(3-9),@#$,randNum(70-100),qwerty)"},
-              {"has2": "draw(randStr(3-9),@#$,randNum(70-100),qwerty)"},
-              {"has3,(40%)": "draw(randStr(3-9),@#$,randNum(70-100),qwerty)"},
+              {"has1": "getRandomString(randStr(3-9),@#$,randNum(70-100),qwerty)"},
+              {"has2": "getRandomString(randStr(3-9),@#$,randNum(70-100),qwerty)"},
+              {"has3,(40%)": "getRandomString(randStr(3-9),@#$,randNum(70-100),qwerty)"},
             ]
           }
         }
@@ -225,16 +227,18 @@ export class MainContentComponent implements OnInit {
 
   generateFile(num) {
     // console.log(this.arrayOfFields);
-    console.log(this.tabToChange);
     if(true) {
       this.show = false;
-      let obj = {
+      let obj: Object = {
         tabOfInputs: this.obj,
         numberOfInputs: num,
         tabOfData: this.tabToChange
       };
-      this.fileService.generateFile(obj).subscribe((res: any) => {
-        saveAs(new Blob([JSON.stringify(res)], {type: "text/plain;charset=utf-8"}), "random.json")
+      
+      this.fileService.generateFile(obj).subscribe((res) => {
+        console.log(typeof res);
+        // saveAs(new Blob([JSON.stringify(res)], {type: "application/json"}), "random.json")
+        saveAs(res, "random.json")
       });
     } else {
       this.show = true;
@@ -243,7 +247,7 @@ export class MainContentComponent implements OnInit {
 
   
   showTest() {
-    console.log(this.obj);
+    // console.log(this.obj);
   }
 }
 
