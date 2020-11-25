@@ -54,13 +54,15 @@ app.post('/generator', (req, res) => {
     let objectPOST = req.body.obj;
     tabOfDataToDraw = objectPOST.tabOfData;
     idNumber = 0;
+
+    //CZYSZCZENIE PLIKU RANDOM.JSON PRZED ZAPISEM NOWYCH DANYCH
     fs.open('./data/random.json', 'w', (err, file) => {
         if (err) {
             throw err;
         }
     });
     randomData(objectPOST).then((ob) => {
-
+        //PRZESLANIE PLIKU DO FRONTENDU
         res.download('./data/random.json', "random.json", (err) => {
             if (err) {
                 console.log(err);
@@ -99,11 +101,12 @@ async function randomData(ob) {
         testValues.push(t[1]);
     }
 
+
     fs.appendFileSync(path, '[');
 
     //FUNKCJA SPRAWDZA DANE - TABLICA, OBIEKT, ZWYKLA ZMIENNA
     //TWORZY GOTOWA LISTE OBIEKTOW
-
+    //NASTEPNIE ZAPISUJE DO PLIKU 
     if (num < 10000) {
         console.log("Less than 10000");
         for (let ww = 0; ww < num; ww++) {
