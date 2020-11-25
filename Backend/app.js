@@ -101,7 +101,7 @@ async function randomData(ob) {
         testValues.push(t[1]);
     }
 
-
+ 
     fs.appendFileSync(path, '[');
 
     //FUNKCJA SPRAWDZA DANE - TABLICA, OBIEKT, ZWYKLA ZMIENNA

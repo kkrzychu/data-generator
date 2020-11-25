@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FileService } from '../file.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { saveAs } from 'file-saver';
-import { Tab } from 'src/app/tab.model';
 import { HttpClient } from '@angular/common/http';
 // 
 
@@ -43,7 +42,7 @@ export class MainContentComponent implements OnInit {
       name: 'Procentowe wypełnienie danych',
       head: 'headingZero',
       coll: 'collapseZero',
-      desc: ['Funkcja ta jest odpowiedzialna za wypełnienie danymi. Użytkownik podaje ile procent danych ma być wygenerowanych, a ile pustych', 
+      desc: ['Funkcja ta jest odpowiedzialna za wypełnienie danymi. Użytkownik podaje ile procent danych ma być wygenerowanych, a ile pustych.', 
       'Przykład implementacji: "imie,(80%)": "getRandomName"']
     },
     {
@@ -56,7 +55,7 @@ export class MainContentComponent implements OnInit {
       name: 'getRandomString',
       head: 'headingTwo',
       coll: 'collapseTwo',
-      desc: ['Funkcja zwraca losowo wygenerowany string w zależności od podanych argumentów przez użytkownika. Argumenty są podawane po przecinku. Metoda randStr() wygeneruje string z losowo wybranych znaków alfabetu oraz długości podanej przez użytkownika, metoda randNum() wygeneruje string składający się z cyfr z podanego przedziału przez użytkownika oraz użytkownik może sam podać string, który będzie łączyny z innymi argumentami',
+      desc: ['Funkcja zwraca losowo wygenerowany string w zależności od podanych argumentów przez użytkownika. Argumenty są podawane po przecinku. Metoda randStr() wygeneruje string z losowo wybranych znaków alfabetu oraz długości podanej przez użytkownika, metoda randNum() wygeneruje string składający się z cyfr z przedziału podanego przez użytkownika lub może sam podać string, który będzie łączyny z innymi parametrami.',
       'Przykład implementacji: getRandomString(randStr(3-8),randNum(1-10),@,randStr(2-4),.,randStr(1-2))']
     },
     {
@@ -70,34 +69,34 @@ export class MainContentComponent implements OnInit {
       name: 'getRandomAge',
       head: 'headingFour',
       coll: 'collapseFour',
-      desc: ['Funkcja zwraca losowo wygenerowany wiek z przedziału od 1 do 100',
+      desc: ['Funkcja zwraca losowo wygenerowany wiek z przedziału od 1 do 100.',
             'Przykład implementacji: getRandomAge']
     },
     {
       name: 'getRandomPhone',
       head: 'headingFive',
       coll: 'collapseFive',
-      desc: ['Funkcja zwraca losowy wygenerowany numer telefonu z przedziału od 100000000 do 999999999',
+      desc: ['Funkcja zwraca losowy wygenerowany numer telefonu z przedziału od 100000000 do 999999999.',
       'Przykład implementacji: getRandomPhone']
     },
     {
       name: 'getRandomBoolean',
       head: 'headingSix',
       coll: 'collapseSix',
-      desc: ['Funkcja zwraca losowo wartość true lub false', 'Przykład implementacji: getRandomBoolean']
+      desc: ['Funkcja zwraca losowo wartość true lub false.', 'Przykład implementacji: getRandomBoolean']
     },
     {
       name: 'getRandomIntNumber',
       head: 'headingSeven',
       coll: 'collapseSeven',
-      desc: ['Funkcja zwraca losową liczbę całkowitą z podanego przedziału przez użytkownika',
+      desc: ['Funkcja zwraca losową liczbę całkowitą z przedziału podanego przez użytkownika.',
       'Przykład implementacji: getRandomIntNumber(10-40)']
     },
     {
       name: 'getRandomFloatNumber',
       head: 'headingEight',
       coll: 'collapseEight',
-      desc: ['Funkcja zwraca losową liczbę zmiennoprzecinkową z podanego przedziału przez użytkownika',
+      desc: ['Funkcja zwraca losową liczbę zmiennoprzecinkową z przedziału podanego przez użytkownika.',
       'Przykład implementacji: getRandomFloatNumber(2000-3000)']
     },
     
@@ -109,7 +108,7 @@ export class MainContentComponent implements OnInit {
       head: 'headingNine',
       coll: 'collapseNine',
       desc: '',
-      desc2: 'Możliwość dostosowania tablicy, z której będzie losowane imię',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowane imię.',
       desc3: 'Przykład implementacji: getRandomName'
     },
     {
@@ -117,7 +116,7 @@ export class MainContentComponent implements OnInit {
       head: 'headingTen',
       coll: 'collapseTen',
       desc: 'Funkcja generująca losowe nazwisko',
-      desc2: 'Możliwość dostosowania tablicy, z której będzie losowane nazwisko',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowane nazwisko.',
       desc3: 'Przykład implementacji: getRandomLastName'
     },
     {
@@ -125,7 +124,7 @@ export class MainContentComponent implements OnInit {
       head: 'headingEleven',
       coll: 'collapseEleven',
       desc: 'Funkcja generująca losowy email',
-      desc2: 'Możliwość dostosowania tablicy, z której będzie losowany email',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowany email.',
       desc3: 'Przykład implementacji: getRandomEmail'
     },
     {
@@ -133,7 +132,7 @@ export class MainContentComponent implements OnInit {
       head: 'headingTwelve',
       coll: 'collapseTwelve',
       desc: 'Funkcja generująca losowy adres',
-      desc2: 'Możliwość dostosowania tablicy, z której będzie losowany adres',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowany adres.',
       desc3: 'Przykład implementacji: getRandomAddress'
     },
     {
@@ -141,7 +140,7 @@ export class MainContentComponent implements OnInit {
       head: 'headingThirten',
       coll: 'collapseThirten',
       desc: 'Funkcja generująca losowe miasto',
-      desc2: 'Możliwość dostosowania tablicy, z której będzie losowana nazwa miasta',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowana nazwa miasta.',
       desc3: 'Przykład implementacji: getRandomCity'
     },
     {
@@ -149,7 +148,7 @@ export class MainContentComponent implements OnInit {
       head: 'headingFourteen',
       coll: 'collapseFourteen',
       desc: 'Funkcja generująca losowe państwo',
-      desc2: 'Możliwość dostosowania tablicy, z której będzie losowana nazwa państwa',
+      desc2: 'Możliwość dostosowania tablicy, z której będzie losowana nazwa państwa.',
       desc3: 'Przykład implementacji: getRandomCountry'
     }
   ];
